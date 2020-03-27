@@ -57,3 +57,6 @@ target
 ./tmp
 .idea/
 /specs/cells
+
+/deploy/pixel_canvas
+/deploy/pixel_lock
