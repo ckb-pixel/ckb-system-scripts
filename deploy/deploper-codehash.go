@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	dataFile, err := os.Open("./pixel_lock")
+	dataFile, err := os.Open("./pixel_canvas")
 	if err != nil {
 		log.Fatalf("load data file error: %v", err)
 	}

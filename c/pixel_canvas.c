@@ -91,7 +91,7 @@ int main() {
       if (ret_i != CKB_SUCCESS) {
         return ret;
       }
-      if (ret_i != 5) {
+      if (len_i != 5) {
         return ERROR_ENCODING;
       }
 
