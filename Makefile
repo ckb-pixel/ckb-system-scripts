@@ -25,7 +25,7 @@ specs/cells/pixel_canvas: c/pixel_canvas.c ${PROTOCOL_HEADER} c/common.h
 	$(OBJCOPY) --only-keep-debug $@ $(subst specs/cells,build,$@.debug)
 	$(OBJCOPY) --strip-debug --strip-all $@
 
-specs/cells/pixel_lock: c/pixel_lock.c ${PROTOCOL_HEADER} c/common.h
+specs/cells/pixel_lock: c/pixel_lock.c ${PROTOCOL_HEADER} c/common.h c/lock_utils.h c/utils.h build/secp256k1_data_info.h $(SECP256K1_SRC)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $<
 	$(OBJCOPY) --only-keep-debug $@ $(subst specs/cells,build,$@.debug)
 	$(OBJCOPY) --strip-debug --strip-all $@
