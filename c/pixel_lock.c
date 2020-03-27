@@ -66,7 +66,6 @@ int check_payment_unlock() {
   }
 
   /* iterate inputs and find input wallet cell */
-  uint64_t total_input_ckb = 0;
   int i = 0;
   len = BLAKE2B_BLOCK_SIZE;
   while (1) {
@@ -102,8 +101,6 @@ int check_payment_unlock() {
       return ERROR_ENCODING;
     }
 
-    total_input_ckb += input_wallets[i].ckb_amount;
-
     i++;
   }
 
@@ -138,7 +135,7 @@ int check_payment_unlock() {
     uint64_t ckb_amount;
     len = CKB_LEN;
     ret = ckb_load_cell_by_field((uint8_t *)&ckb_amount, &len, 0, i,
-                                         CKB_SOURCE_GROUP_OUTPUT,
+                                         CKB_SOURCE_OUTPUT,
                                          CKB_CELL_FIELD_CAPACITY);
     if (ret != CKB_SUCCESS) {
       return ERROR_SYSCALL;
@@ -192,55 +189,10 @@ int check_payment_unlock() {
   }
 
   /* check official lock */
-  uint64_t total_input_official_ckb = 0;
-  uint64_t total_output_official_ckb = 0;
+  int has_fee = 0;
   uint8_t official_lock_hash[BLAKE2B_BLOCK_SIZE] = {
-    244, 50, 184,  254, 178, 192, 115, 6,
-    185, 207, 63,  68,  92,  218, 34,  34,
-    119, 254, 201, 68,  214, 12,  13,  28,
-    242, 64,  200, 222, 99,  10,  80,  59
+    106, 36, 43, 87, 34, 116, 132, 233, 4, 180, 224, 139, 169, 111, 25, 166, 35, 195, 103, 220, 189, 24, 103, 94, 198, 242, 167, 26, 15, 244, 236, 38
   };
-  i = 0;
-  while (1) {
-    uint8_t input_lock_hash[BLAKE2B_BLOCK_SIZE];
-    uint64_t len = BLAKE2B_BLOCK_SIZE;
-    /* check lock hash */
-    ret = ckb_load_cell_by_field(input_lock_hash, &len, 0, i,
-                                         CKB_SOURCE_INPUT,
-                                         CKB_CELL_FIELD_LOCK_HASH);
-    if (ret == CKB_INDEX_OUT_OF_BOUND) {
-      break;
-    }
-    if (ret != CKB_SUCCESS) {
-      return ret;
-    }
-    if (len != BLAKE2B_BLOCK_SIZE) {
-      return ERROR_ENCODING;
-    }
-    int has_same_lock =
-        memcmp(input_lock_hash, official_lock_hash, BLAKE2B_BLOCK_SIZE) == 0;
-    if (!has_same_lock) {
-      i++;
-      continue;
-    }
-
-    /* load amount */
-    uint64_t ckb_amount;
-    len = CKB_LEN;
-    ret = ckb_load_cell_by_field((uint8_t *)&ckb_amount, &len, 0, i,
-                                         CKB_SOURCE_INPUT,
-                                         CKB_CELL_FIELD_CAPACITY);
-    if (ret != CKB_SUCCESS) {
-      return ERROR_SYSCALL;
-    }
-    if (len != CKB_LEN) {
-      return ERROR_ENCODING;
-    }
-
-    total_input_official_ckb += ckb_amount;
-
-    i++;
-  }
   i = 0;
   while (1) {
     uint8_t output_lock_hash[BLAKE2B_BLOCK_SIZE];
@@ -260,30 +212,15 @@ int check_payment_unlock() {
     }
     int has_same_lock =
         memcmp(output_lock_hash, official_lock_hash, BLAKE2B_BLOCK_SIZE) == 0;
-    if (!has_same_lock) {
-      i++;
-      continue;
+    if (has_same_lock) {
+      has_fee = 1;
+      break;
     }
-
-    /* load amount */
-    uint64_t ckb_amount;
-    len = CKB_LEN;
-    ret = ckb_load_cell_by_field((uint8_t *)&ckb_amount, &len, 0, i,
-                                         CKB_SOURCE_OUTPUT,
-                                         CKB_CELL_FIELD_CAPACITY);
-    if (ret != CKB_SUCCESS) {
-      return ERROR_SYSCALL;
-    }
-    if (len != CKB_LEN) {
-      return ERROR_ENCODING;
-    }
-
-    total_output_official_ckb += ckb_amount;
 
     i++;
   }
 
-  if (total_output_official_ckb < total_input_official_ckb + total_input_ckb / 10) {
+  if (!has_fee) {
     return ERROR_OFFICIAL_FEE;
   }
 
