@@ -50,7 +50,7 @@ func main() {
 	// pixel lock
 	tx.CellDeps = append(tx.CellDeps, &types.CellDep{
 		OutPoint: &types.OutPoint{
-			TxHash: types.HexToHash("0xec8fe683e19dcbfb8ec2081261f6954e2820e7f8e629aba3ea8f2cf384c91ed9"),
+			TxHash: types.HexToHash("0x42bbf1806f8baf8bd6b16c0682157dc717c3d021644aae108e03e452479199b1"),
 			Index:  0,
 		},
 		DepType: types.DepTypeCode,
@@ -60,7 +60,7 @@ func main() {
 	tx.Outputs = append(tx.Outputs, &types.CellOutput{
 		Capacity: uint64(18000000000),
 		Lock: &types.Script{
-			CodeHash: types.HexToHash("0xae3545f6cb8d300f7d51daa30c5eecaa4ef5a50a6f810c756e43323f48435a54"),
+			CodeHash: types.HexToHash("0xe959ac726354858d598c9ea1ceb5f617e409b1b0a4a3baa25aa08b6da7b95091"),
 			HashType: types.HashTypeType,
 			Args:     bider.Args,
 		},
@@ -73,7 +73,7 @@ func main() {
 	tx.OutputsData = append(tx.OutputsData, []byte{'0', '0', '1', '2', '3'})
 	// secp256k1
 	tx.Outputs = append(tx.Outputs, &types.CellOutput{
-		Capacity: uint64(16000000000),
+		Capacity: uint64(6100000000),
 		Lock: &types.Script{
 			CodeHash: types.HexToHash("0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8"),
 			HashType: types.HashTypeType,
@@ -85,7 +85,7 @@ func main() {
 	tx.Outputs = append(tx.Outputs, &types.CellOutput{
 		Capacity: uint64(18000000000),
 		Lock: &types.Script{
-			CodeHash: types.HexToHash("0xae3545f6cb8d300f7d51daa30c5eecaa4ef5a50a6f810c756e43323f48435a54"),
+			CodeHash: types.HexToHash("0xe959ac726354858d598c9ea1ceb5f617e409b1b0a4a3baa25aa08b6da7b95091"),
 			HashType: types.HashTypeType,
 			Args:     owner,
 		},
@@ -93,7 +93,7 @@ func main() {
 	tx.OutputsData = append(tx.OutputsData, []byte{})
 	// change
 	tx.Outputs = append(tx.Outputs, &types.CellOutput{
-		Capacity: uint64(794399990000),
+		Capacity: uint64(767299980000),
 		Lock: bider,
 	})
 	tx.OutputsData = append(tx.OutputsData, []byte{})
@@ -102,7 +102,7 @@ func main() {
 	_, _, err = transaction.AddInputsForTransaction(tx, []*types.Cell{
 		{
 			OutPoint: &types.OutPoint{
-				TxHash: types.HexToHash("0x260883ff5a853ad3bd87e1015b8ede258f96b8b9d9a9e6069e5b5b1f131b557e"),
+				TxHash: types.HexToHash("0xf23b95472358dd731b71f53dbd19031347a8d1bce8ba4968978ab94d78f6f44a"),
 				Index: 0,
 			},
 		},
@@ -111,8 +111,8 @@ func main() {
 	group, witnessArgs, err := transaction.AddInputsForTransaction(tx, []*types.Cell{
 		{
 			OutPoint: &types.OutPoint{
-				TxHash: types.HexToHash("0xcded4d2604e561141cf9d19b7fd12aabc14ce6778fdf7800a4b1b835c7c78a02"),
-				Index: 0,
+				TxHash: types.HexToHash("0x59f1fca75408ea690c6055022ccfa8961e782cbfff16ce083fd15216191543e3"),
+				Index: 3,
 			},
 		},
 	})
