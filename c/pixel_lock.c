@@ -1,17 +1,3 @@
-/* UDT anyone-can-pay lock script
- * For simplify, we call a cell with anyone-can-pay lock a wallet cell.
- *
- * Wallet cell can be unlocked without a signature, if:
- *
- * 1. There is 1 output wallet cell that has the same type hash with the
- * unlocked wallet cell.
- * 2. The UDT or CKB(if type script is none) in the output wallet is more than
- * the unlocked wallet.
- * 3. if the type script is none, the cell data is empty.
- *
- * otherwise, the script perform secp256k1_blake160_sighash_all verification.
- */
-
 #include "blake2b.h"
 #include "ckb_syscalls.h"
 #include "common.h"
